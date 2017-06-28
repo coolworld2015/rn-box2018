@@ -1,0 +1,3 @@
+rootProject.name = 'rnBox'
+
+include ':app'
