@@ -9,7 +9,7 @@ npm install -g react-native-cli
 -------------------------------------------------------------------------------------------------
 react-native init AwesomeProject
 -------------------------------------------------------------------------------------------------
-package.json --> dependencies 
+package.json -> dependencies 
 "react-native-deprecated-custom-components": "^0.1.0",
 "react-native-scrollable-tab-view": "^0.6.5"
 -------------------------------------------------------------------------------------------------
@@ -38,6 +38,8 @@ export ANDROID_HOME=/Users/ed/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/bin
 -------------------------------------------------------------------------------------------------
 add VirtualBox
+-------------------------------------------------------------------------------------------------
+ERROR -> cd android/ && ./gradlew clean
 -------------------------------------------------------------------------------------------------
 APK -> react-native bundle --dev false --platform android --entry-file index.android.js --bundle-output ./android/app/build/intermediates/assets/debug/index.android.bundle --assets-dest ./android/app/build/intermediates/res/merged/debug
 -------------------------------------------------------------------------------------------------

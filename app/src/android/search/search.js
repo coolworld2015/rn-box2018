@@ -21,7 +21,11 @@ class Search extends Component {
             showProgress: false,
             eventSwitchTitle: true,
             eventSwitchBase: true,
+            eventSwitchBaseMovies: true,
+            eventSwitchBaseType: true,
             textSwitchBase: 'Search clips',
+            textSwitchBaseMovies: 'Search movies',
+            textSwitchBaseType: 'Music',
             bugANDROID: ''
         }
     }
@@ -48,25 +52,57 @@ class Search extends Component {
             return;
         }
 		
-		if (this.state.textSwitchBase === 'Search clips') {
-			this.props.navigator.push({
-				index: 4,
-				data: {
-					searchQuery: this.state.searchQuery,
-					searchType: 'musicVideo'
-				}
-			})
+		if (this.state.textSwitchBaseType === 'Music') {
+			if (this.state.textSwitchBase === 'Search clips') {
+				this.props.navigator.push({
+					index: 1,
+					data: {
+						searchQuery: this.state.searchQuery,
+						searchType: 'musicVideo'
+					}
+				})
+			} else {
+				this.props.navigator.push({
+					index: 1,
+					data: {
+						searchQuery: this.state.searchQuery,
+						searchType: 'music'
+					}
+				})
+			}
 		} else {
-			this.props.navigator.push({
-				index: 4,
-				data: {
-					searchQuery: this.state.searchQuery,
-					searchType: 'music'
-				}
-			})
+			if (this.state.textSwitchBaseMovies === 'Search movies') {
+				this.props.navigator.push({
+					index: 2,
+					data: {
+						searchQuery: this.state.searchQuery,
+						searchType: 'movie'
+					}
+				})
+			} else {
+				this.props.navigator.push({
+					index: 2,
+					data: {
+						searchQuery: this.state.searchQuery,
+						searchType: 'tvShow'
+					}
+				})
+			}			
 		}
     }
 
+    toggleTypeChangeType() {
+        if (!this.state.eventSwitchBaseType) {
+            this.setState({
+                textSwitchBaseType: 'Music'
+            });
+        } else {
+            this.setState({
+                textSwitchBaseType: 'Movies'
+            });
+        }
+    }
+	
     toggleTypeChange() {
         if (!this.state.eventSwitchBase) {
             this.setState({
@@ -77,6 +113,18 @@ class Search extends Component {
                 textSwitchBase: 'Search music'
             });
         }
+    }	
+	
+    toggleTypeChangeMovies() {
+        if (!this.state.eventSwitchBaseMovies) {
+            this.setState({
+                textSwitchBaseMovies: 'Search movies'
+            });
+        } else {
+            this.setState({
+                textSwitchBaseMovies: 'Search TV Series'
+            });
+        }
     }
 
     goBack() {
@@ -84,21 +132,63 @@ class Search extends Component {
     }
 
     render() {
-        let validCtrl;
+        let validCtrl, showBlock;
 
         if (this.state.invalidValue) {
             validCtrl = <Text style={styles.error}>
                 Value required - please provide.
             </Text>;
         }
+		
+        if (this.state.eventSwitchBaseType) {
+            showBlock = <View style={styles.switchBlock}>
+				<View>
+					<Text style={styles.switchItemText}>
+						{this.state.textSwitchBase}
+					</Text>
+				</View>
 
+				<View style={styles.switchItem}>
+					<Switch
+						onValueChange={(value) => {
+							this.toggleTypeChange();
+							this.setState({
+								eventSwitchBase: value
+							});
+						}}
+						value={this.state.eventSwitchBase}
+					/>
+				</View>
+			</View>;
+        } else {
+            showBlock = <View style={styles.switchBlock}>
+				<View>
+					<Text style={styles.switchItemText}>
+						{this.state.textSwitchBaseMovies}
+					</Text>
+				</View>
+
+				<View style={styles.switchItem}>
+					<Switch
+						onValueChange={(value) => {
+							this.toggleTypeChangeMovies();
+							this.setState({
+								eventSwitchBaseMovies: value
+							});
+						}}
+						value={this.state.eventSwitchBaseMovies}
+					/>
+				</View>
+			</View>;
+		}
+		
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
                     <View>
 						<TouchableHighlight
 							onPress={()=> this.goBack()}
-							underlayColor='#48BBEC'
+							underlayColor='darkblue'
 						>
                             <View>
                                 <Text style={styles.textSmall}>
@@ -118,7 +208,7 @@ class Search extends Component {
                     <View>
 						<TouchableHighlight
 							onPress={()=> this.clearSearch()}
-							underlayColor='#48BBEC'
+							underlayColor='darkblue'
 						>
                             <View>
                                 <Text style={styles.textSmall}>
@@ -134,22 +224,24 @@ class Search extends Component {
                         <View style={styles.switchBlock}>
                             <View>
                                 <Text style={styles.switchItemText}>
-                                    {this.state.textSwitchBase}
+                                    {this.state.textSwitchBaseType}
                                 </Text>
                             </View>
 
                             <View style={styles.switchItem}>
                                 <Switch
                                     onValueChange={(value) => {
-                                        this.toggleTypeChange();
+                                        this.toggleTypeChangeType();
                                         this.setState({
-                                            eventSwitchBase: value
+                                            eventSwitchBaseType: value
                                         });
                                     }}
-                                    value={this.state.eventSwitchBase}
+                                    value={this.state.eventSwitchBaseType}
                                 />
                             </View>
-                        </View>
+                        </View>   
+						
+						{showBlock}
 
                         <View style={styles.inputBlock}>
                             <TextInput
@@ -230,7 +322,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        borderRadius: 5
+        borderRadius: 5,
+		marginBottom: 10
     },
     switchItem: {
         marginTop: 10,
@@ -244,7 +337,7 @@ const styles = StyleSheet.create({
     },
     inputBlock: {
         height: 50,
-        marginTop: 10,
+        marginTop: 0,
         borderWidth: 1,
         //borderColor: '#48BBEC',
         borderColor: 'darkblue',

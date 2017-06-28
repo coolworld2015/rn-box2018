@@ -19,7 +19,7 @@ import {
 	BackAndroid
 } from 'react-native';
 
-class SearchResults extends Component {
+class SearchResultsMovies extends Component {
     constructor(props) {
         super(props);
 		
@@ -102,7 +102,7 @@ class SearchResults extends Component {
 	
     pressRow(rowData) {
 		this.props.navigator.push({
-			index: 11,
+			index: 22,
 			data: rowData
 		});
     }
@@ -446,4 +446,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SearchResults;
+export default SearchResultsMovies;

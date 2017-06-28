@@ -172,8 +172,11 @@ class SearchDetails extends Component {
 						<Text style={styles.itemTextSmallBold}>
 							{this.state.pushEvent.artistName}
 						</Text>
- 
 						
+						<Text style={styles.itemTextLeft}>
+							{this.state.pushEvent.longDescription}
+						</Text>
+ 						
 						<TouchableHighlight
 							onPress={()=> this.playTrack()}
 							style={styles.button}>
@@ -240,6 +243,13 @@ const styles = StyleSheet.create({
 	itemText: {
         fontSize: 14,
         textAlign: 'center',
+        margin: 3,
+        marginLeft: 2,
+        color: 'black'
+    },	  
+	itemTextLeft: {
+        fontSize: 14,
+        textAlign: 'left',
         margin: 3,
         marginLeft: 2,
         color: 'black'

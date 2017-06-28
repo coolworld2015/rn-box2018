@@ -5,12 +5,13 @@ import NavigationExperimental from 'react-native-deprecated-custom-components';
 import ScrollableTabView, {DefaultTabBar} from 'react-native-scrollable-tab-view';
 
 import Search from '../search/search';
-import SearchArtist from '../search/searchArtist';
+ 
 import SearchDetails from '../search/searchDetails';
-import SearchTopTrack from '../search/searchTopTrack';
-import SearchTrack from '../search/searchTrack';
+import SearchDetailsMovies from '../search/searchDetailsMovies';
+ 
 
 import SearchResults from '../search/searchResults';
+import SearchResultsMovies from '../search/searchResultsMovies';
 
 import Movies from '../movies/movies';
 import MoviesDetails from '../movies/moviesDetails';
@@ -31,8 +32,8 @@ class AppContainer extends Component {
  					underlineStyle={{backgroundColor: 'darkblue'}}
 					backgroundColor='white'/>}
             >
-                <MoviesTab tabLabel="Music"/>
                 <SearchTab tabLabel="Search"/>
+                <MoviesTab tabLabel="Music"/>
             </ScrollableTabView>
         );
     }
@@ -91,17 +92,15 @@ class SearchTab extends Component {
 		switch (route.index) {
 			case 0: return <Search routes={this.routes} navigator={navigator} />
 					break;			
-			case 1: return <SearchArtist data={route.data} routes={this.routes} navigator={navigator} />
+			case 1: return <SearchResults data={route.data} routes={this.routes} navigator={navigator} />
+					break;				
+			case 11: return <SearchDetails data={route.data} routes={this.routes} navigator={navigator} />
 					break;			
-			case 2: return <SearchDetails data={route.data} routes={this.routes} navigator={navigator} />
+			case 2: return <SearchResultsMovies data={route.data} routes={this.routes} navigator={navigator} />
+					break;			
+			case 22: return <SearchDetailsMovies data={route.data} routes={this.routes} navigator={navigator} />
 					break;	
-			case 3: return <SearchTopTrack data={route.data} routes={this.routes} navigator={navigator} />
-					break;
-			case 4: return <SearchResults data={route.data} routes={this.routes} navigator={navigator} />
-					break;			
-			case 41: return <SearchTrack data={route.data} routes={this.routes} navigator={navigator} />
-					break;
-			case 5: return <PlayTrack data={route.data} routes={this.routes} navigator={navigator} />
+			case 3: return <PlayTrack data={route.data} routes={this.routes} navigator={navigator} />
 					break;					
  		}
  	}
