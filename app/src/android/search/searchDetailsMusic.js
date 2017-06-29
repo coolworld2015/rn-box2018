@@ -16,7 +16,7 @@ import {
 	BackAndroid
 } from 'react-native';
 
-class SearchDetails extends Component {
+class SearchDetailsMusic extends Component {
     constructor(props) {
         super(props);
 		
@@ -25,44 +25,30 @@ class SearchDetails extends Component {
 				this.props.navigator.pop();
 			}
 			return true;
-		});
+		});	
 		
 		this.state = {
-			name: '',
-			artist: '',
-			album: '',
-			duration: '',
-			url: ''
+			pushEvent: {
+				trackName: '',
+				releaseDate: ' - '
+			}
 		};
 		
 		if (props.data) {
 			this.state = {
-				name: props.data.name,
-				image: props.data.image,
-				artist: props.data.artist,
-				album: props.data.album,
-				duration: props.data.duration,
-				url: props.data.url
+				pushEvent: props.data
 			};
 		}	
     }
 	
-	addItem() {
-        let movies = [];
+	localStorageInsert() {
+        var movies = [];
 
         AsyncStorage.getItem('rn-movies.movies')
             .then(req => JSON.parse(req))
             .then(json => {
                 movies = [].concat(json);
-                movies.push({
-					trackId: + new Date,
-					name: this.state.name,
-					image: this.state.image,
-					artist: this.state.artist,
-					album: this.state.album,
-					duration: this.state.duration,
-					url: this.state.url
-				});
+                movies.push(this.state.pushEvent);
 
                 if (movies[0] == null) {
                     movies.shift()
@@ -78,12 +64,12 @@ class SearchDetails extends Component {
             })
             .catch(error => console.log(error));
     }
-	
+		
     playTrack() {
 		this.props.navigator.push({
-			index: 5,
+			index: 3,
 			data: {
-				url: this.state.url
+				url: this.state.pushEvent.previewUrl
 			}
 		});
     }
@@ -94,16 +80,30 @@ class SearchDetails extends Component {
 	
     render() {
         var image = <View />;
- 
-		image = <Image
-			source={{uri: this.state.image}}
-			style={{
-				height: 300,
-				width: 300,
-				borderRadius: 10,
-				margin: 5
-			}}
-		/>;
+		
+		if (this.state.pushEvent) {
+			if (this.state.pushEvent.artworkUrl100) {
+				image = <Image
+					source={{uri: this.state.pushEvent.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
+					style={{
+						height: 300,
+						width: 300,
+						borderRadius: 10,
+						margin: 5
+					}}
+				/>;
+			} else {
+				image = <Image
+					source={{uri: this.state.pushEvent.pic}}
+					style={{
+						height: 300,
+						width: 200,
+						borderRadius: 20,
+						margin: 20
+					}}
+				/>;
+			}
+		}
 		
         return (
             <View style={styles.container}>
@@ -111,7 +111,7 @@ class SearchDetails extends Component {
 					<View>
 						<TouchableHighlight
 							onPress={()=> this.goBack()}
-							underlayColor='#48BBEC'
+							underlayColor='darkblue'
 						>
 							<Text style={styles.textSmall}>
 								Back
@@ -120,17 +120,17 @@ class SearchDetails extends Component {
 					</View>
 					<View style={styles.itemWrap}>
 						<TouchableHighlight
-							underlayColor='#ddd'
+							underlayColor='darkblue'
 						>
 							<Text style={styles.textLarge}>
-								{this.state.name}
+								{this.state.pushEvent.trackName}
 							</Text>
 						</TouchableHighlight>	
 					</View>						
 					<View>
 						<TouchableHighlight
-							onPress={()=> this.addItem()}
-							underlayColor='#48BBEC'
+							onPress={()=> this.localStorageInsert()}
+							underlayColor='darkblue'
 						>
 							<Text style={styles.textSmall}>
 								Add
@@ -152,32 +152,33 @@ class SearchDetails extends Component {
 					}}>
 						{image}
 					</View>
-					 
+					
 						<Text style={styles.itemTextBold}>
-							{this.state.name}
-						</Text>
-						
-						<Text style={styles.itemText}>
-							{this.state.artist}
-						</Text>
-						
-						<Text style={styles.itemText}>
-							{this.state.album}
-						</Text>
-						
-						<Text style={styles.itemText}>
-							{this.state.duration}
-						</Text>
-						
-						<Text style={styles.itemText}>
-							{this.state.url}
+							{this.state.pushEvent.trackName}
 						</Text>
 
+						<Text style={styles.itemText}>
+							{this.state.pushEvent.releaseDate.split('-')[0]}
+						</Text>
+
+						<Text style={styles.itemText}>
+							{this.state.pushEvent.country}
+						</Text>
+
+						<Text style={styles.itemText}>
+							{this.state.pushEvent.primaryGenreName}
+						</Text>
+
+						<Text style={styles.itemTextSmallBold}>
+							{this.state.pushEvent.artistName}
+						</Text>
+ 
+						
 						<TouchableHighlight
 							onPress={()=> this.playTrack()}
 							style={styles.button}>
 							<Text style={styles.buttonText}>
-								Play track
+								Play
 							</Text>
 						</TouchableHighlight>
 						
@@ -197,7 +198,8 @@ const styles = StyleSheet.create({
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		backgroundColor: '#48BBEC',
+		//backgroundColor: '#48BBEC',
+		backgroundColor: 'darkblue',
 		borderWidth: 0,
 		borderColor: 'whitesmoke'
 	},	
@@ -234,17 +236,26 @@ const styles = StyleSheet.create({
         margin: 5,
         fontWeight: 'bold',
 		color: 'black'
-    },
-    itemText: {
+    },  
+	itemText: {
         fontSize: 14,
         textAlign: 'center',
         margin: 3,
         marginLeft: 2,
         color: 'black'
+    },	
+	itemTextSmallBold: {
+        fontSize: 14,
+        textAlign: 'center',
+        margin: 3,
+        marginLeft: 2,
+		fontWeight: 'bold',
+        color: 'black'
     },
     button: {
         height: 50,
-        backgroundColor: '#48BBEC',
+        //backgroundColor: '#48BBEC',
+        backgroundColor: 'darkblue',
         borderColor: '#48BBEC',
         alignSelf: 'stretch',
         marginTop: 10,
@@ -267,4 +278,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SearchDetails;
+export default SearchDetailsMusic;

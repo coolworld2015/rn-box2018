@@ -5,14 +5,16 @@ import NavigationExperimental from 'react-native-deprecated-custom-components';
 import ScrollableTabView, {DefaultTabBar} from 'react-native-scrollable-tab-view';
 
 import Search from '../search/search';
- 
-import SearchDetails from '../search/searchDetails';
-import SearchDetailsMovies from '../search/searchDetailsMovies';
- 
 
-import SearchResults from '../search/searchResults';
+import SearchResultsMusic from '../search/searchResultsMusic';
+import SearchDetailsMusic from '../search/searchDetailsMusic';
+
 import SearchResultsMovies from '../search/searchResultsMovies';
+import SearchDetailsMovies from '../search/searchDetailsMovies';
 
+import Music from '../movies/movies';
+import MusicDetails from '../movies/moviesDetails';
+ 
 import Movies from '../movies/movies';
 import MoviesDetails from '../movies/moviesDetails';
 
@@ -36,6 +38,49 @@ class AppContainer extends Component {
                 <MoviesTab tabLabel="Music"/>
             </ScrollableTabView>
         );
+    }
+}
+
+class SearchTab extends Component {
+	constructor(props) {
+		super(props);
+		this.routes = [
+			{title: 'Search', index: 0},
+			{title: 'Search Music', index: 1},
+			{title: 'Search Music Details', index: 2},
+			{title: 'Search Movies', index: 3},
+			{title: 'Search Movies Details', index: 4},
+			{title: 'Play Track', index: 5}
+		];
+	}
+		  
+	renderScene(route, navigator) {
+		switch (route.index) {
+			case 0: return <Search routes={this.routes} navigator={navigator} />
+					break;			
+			case 1: return <SearchResultsMusic data={route.data} routes={this.routes} navigator={navigator} />
+					break;				
+			case 11: return <SearchDetailsMusic data={route.data} routes={this.routes} navigator={navigator} />
+					break;			
+			case 2: return <SearchResultsMovies data={route.data} routes={this.routes} navigator={navigator} />
+					break;			
+			case 22: return <SearchDetailsMovies data={route.data} routes={this.routes} navigator={navigator} />
+					break;	
+			case 3: return <PlayTrack data={route.data} routes={this.routes} navigator={navigator} />
+					break;					
+ 		}
+ 	}
+
+    render() {
+        return (
+            <NavigationExperimental.Navigator
+                initialRoute={this.routes[0]}
+                initialRouteStack={this.routes}
+                renderScene={this.renderScene.bind(this)}
+                configureScene={(route, routeStack) =>
+                    NavigationExperimental.Navigator.SceneConfigs.PushFromRight}
+            />
+        )
     }
 }
 
@@ -73,49 +118,6 @@ class MoviesTab extends Component {
 			/>
 		)
 	}
-}
-
-class SearchTab extends Component {
-	constructor(props) {
-		super(props);
-		this.routes = [
-			{title: 'Search', index: 0},
-			{title: 'Search Artist', index: 1},
-			{title: 'Search Details', index: 2},
-			{title: 'Search Top Track', index: 3},
-			{title: 'Search Track', index: 4},
-			{title: 'Play Track', index: 5}
-		];
-	}
-		  
-	renderScene(route, navigator) {
-		switch (route.index) {
-			case 0: return <Search routes={this.routes} navigator={navigator} />
-					break;			
-			case 1: return <SearchResults data={route.data} routes={this.routes} navigator={navigator} />
-					break;				
-			case 11: return <SearchDetails data={route.data} routes={this.routes} navigator={navigator} />
-					break;			
-			case 2: return <SearchResultsMovies data={route.data} routes={this.routes} navigator={navigator} />
-					break;			
-			case 22: return <SearchDetailsMovies data={route.data} routes={this.routes} navigator={navigator} />
-					break;	
-			case 3: return <PlayTrack data={route.data} routes={this.routes} navigator={navigator} />
-					break;					
- 		}
- 	}
-
-    render() {
-        return (
-            <NavigationExperimental.Navigator
-                initialRoute={this.routes[0]}
-                initialRouteStack={this.routes}
-                renderScene={this.renderScene.bind(this)}
-                configureScene={(route, routeStack) =>
-                    NavigationExperimental.Navigator.SceneConfigs.PushFromRight}
-            />
-        )
-    }
 }
 
 export default AppContainer;
