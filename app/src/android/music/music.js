@@ -15,42 +15,25 @@ import {
     Alert,
 	Image,
 	Dimensions,
-	RefreshControl,
-	BackAndroid
+	RefreshControl
 } from 'react-native';
 
-class SearchResultsMusic extends Component {
+class Music extends Component {
     constructor(props) {
         super(props);
-		
-		BackAndroid.addEventListener('hardwareBackPress', () => {
-			if (this.props.navigator) {
-				this.props.navigator.pop();
-			}
-			return true;
-		});	
-		
+
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
         });
 
-		this.state = {
-			dataSource: ds.cloneWithRows([]),
-			searchQuery: ''
-		}	
-		
-		if (props.data) {
-			this.state = {			
-				dataSource: ds.cloneWithRows([]),
-				searchType: props.data.searchType,
-				searchQueryHttp: props.data.searchQuery,
-				showProgress: true,
-				resultsCount: 0,
-				recordsCount: 15,
-				positionY: 0,
-				searchQuery: '',
-				refreshing: false
-			}
+        this.state = {
+            dataSource: ds.cloneWithRows([]),
+            showProgress: true,
+            resultsCount: 0,
+            recordsCount: 15,
+            positionY: 0,
+			searchQuery: '',
+			refreshing: false
         };
     }
 	
@@ -61,6 +44,20 @@ class SearchResultsMusic extends Component {
         this.getItems();
     }
 	
+    componentWillUpdate() {
+        if (appConfig.music.refresh) {
+            appConfig.music.refresh = false;
+
+            this.setState({
+                showProgress: true
+            });
+
+			setTimeout(() => {
+				this.getItems()
+			}, 1000);
+        }
+    }
+
     getItems() {
 		this.setState({
 			serverError: false,
@@ -70,54 +67,69 @@ class SearchResultsMusic extends Component {
 			searchQuery: ''
         });
 		
-        fetch('https://itunes.apple.com/search?media='
-			+ this.state.searchType + '&term='
-            + this.state.searchQueryHttp, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((response)=> response.json())
-            .then((responseData)=> {
-                this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(responseData.results.slice(0, 5)),
-                    resultsCount: responseData.results.length,
-                    responseData: responseData.results,
-                    filteredItems: responseData.results
-                });
+        AsyncStorage.getItem('rn-box.music')
+            .then(req => JSON.parse(req))
+            .then(json => {
+				if (json) {
+					this.setState({
+						dataSource: this.state.dataSource.cloneWithRows(json.sort(this.sort).slice(0, 5)),
+						resultsCount: json.length,
+						responseData: json.sort(this.sort),
+						filteredItems: json.sort(this.sort)
+					});
+				}
             })
-            .catch((error)=> {
-                this.setState({
-                    serverError: true
-                });
-            })
+            .catch(error => console.log(error))
             .finally(()=> {
                 this.setState({
                     showProgress: false
                 });
             });
     }
-	
-    pressRow(rowData) {
+
+    sort(a, b) {
+        var nameA = a.trackName.toLowerCase(), nameB = b.trackName.toLowerCase();
+        if (nameA < nameB) {
+            return -1
+        }
+        if (nameA > nameB) {
+            return 1
+        }
+        return 0;
+    }
+
+    showDetails(rowData) {
 		this.props.navigator.push({
-			index: 11,
+			index: 1,
 			data: rowData
 		});
     }
-	
+
     renderRow(rowData) {
+        var image;
+        if (rowData) {
+            if (rowData.artworkUrl100) {
+                image = <Image
+                    source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
+                    style={styles.img}
+                />;
+            } else {
+                image = <Image
+                    source={{uri: rowData.pic}}
+                    style={styles.img}
+                />;
+            }
+        }
+		
         return (
             <TouchableHighlight
-                onPress={()=> this.pressRow(rowData)}
+                onPress={()=> this.showDetails(rowData)}
                 underlayColor='#ddd'
             >
                 <View style={styles.imgsList}>
-                    <Image
-                        source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
-                        style={styles.img}
-                    />
+
+                    {image}
+
                     <View style={styles.textBlock}>
                         <Text style={styles.textItemBold}>
 							{rowData.trackName}
@@ -171,8 +183,9 @@ class SearchResultsMusic extends Component {
         if (this.state.responseData == undefined) {
             return;
         }
+		
         var arr = [].concat(this.state.responseData);
-        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) >= 0);
+        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) != -1);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
@@ -201,10 +214,6 @@ class SearchResultsMusic extends Component {
             searchQuery: ''
         });
     }
-	
-    goBack(rowData) {
-		this.props.navigator.pop();
-	}
 	
     render() {
         let errorCtrl, loader, image;
@@ -235,39 +244,39 @@ class SearchResultsMusic extends Component {
 				}}
 			/>;
 		}
-
+		
         return (
             <View style={styles.container}>
 				<View style={styles.header}>
 					<View>
 						<TouchableHighlight
-							onPress={()=> this.goBack()}
-							underlayColor='darkblue'
+							onPress={()=> this.refreshDataAndroid()}
+							underlayColor='#ddd'
 						>
 							<Text style={styles.textSmall}>
-								Back
+								 
 							</Text>
 						</TouchableHighlight>	
 					</View>
-					<View style={styles.itemWrap}>
+					<View>
 						<TouchableHighlight
-							underlayColor='darkblue'
+							underlayColor='#ddd'
 						>
 							<Text style={styles.textLarge}>
-								{this.state.searchQueryHttp}
+								Music
 							</Text>
 						</TouchableHighlight>	
 					</View>						
 					<View>
 						<TouchableHighlight
-							underlayColor='darkblue'
+							underlayColor='#ddd'
 						>
 							<Text style={styles.textSmall}>
 							</Text>
 						</TouchableHighlight>	
 					</View>
 				</View>
-				
+			
                 <View style={styles.iconForm}>
 					<View>
 						<TextInput
@@ -398,7 +407,7 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		textAlign: 'center',
 		margin: 10,
-		marginRight: 40,
+		marginRight: 20,
 		fontWeight: 'bold',
 		color: 'white'
 	},		
@@ -446,4 +455,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SearchResultsMusic;
+export default Music;

@@ -42,21 +42,21 @@ class SearchDetailsMusic extends Component {
     }
 	
 	localStorageInsert() {
-        var movies = [];
+        var music = [];
 
-        AsyncStorage.getItem('rn-movies.movies')
+        AsyncStorage.getItem('rn-box.music')
             .then(req => JSON.parse(req))
             .then(json => {
-                movies = [].concat(json);
-                movies.push(this.state.pushEvent);
+                music = [].concat(json);
+                music.push(this.state.pushEvent);
 
-                if (movies[0] == null) {
-                    movies.shift()
+                if (music[0] == null) {
+                    music.shift()
                 } // Hack !!!
 
-                AsyncStorage.setItem('rn-movies.movies', JSON.stringify(movies))
+                AsyncStorage.setItem('rn-box.music', JSON.stringify(music))
                     .then(json => {
-                            appConfig.movies.refresh = true;
+                            appConfig.music.refresh = true;
                             this.props.navigator.pop();
                         }
                     );

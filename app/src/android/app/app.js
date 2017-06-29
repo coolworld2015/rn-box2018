@@ -21,7 +21,10 @@ class App extends Component {
 		});
 
         window.appConfig = {
-            movies: {
+            music: {
+                refresh: false
+            },          
+			movies: {
                 refresh: false
             }
         };		

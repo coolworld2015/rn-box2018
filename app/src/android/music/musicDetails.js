@@ -10,13 +10,12 @@ import {
     ListView,
     ScrollView,
     ActivityIndicator,
-    TextInput,
     AsyncStorage,
     Alert,
 	BackAndroid
 } from 'react-native';
 
-class SearchDetailsMovies extends Component {
+class MusicDetails extends Component {
     constructor(props) {
         super(props);
 		
@@ -41,33 +40,52 @@ class SearchDetailsMovies extends Component {
 		}	
     }
 	
-	localStorageInsert() {
-        var movies = [];
+    deleteMovieDialog() {
+		Alert.alert(
+			'Delete music',
+			'Are you sure you want to delete music ' + this.state.pushEvent.trackName + '?',
+			[
+				{text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
+				{
+					text: 'OK', onPress: () => {
+					this.deleteMovie();
+					}
+				},
+			]
+		);	
+	}
+	
+	deleteMovie(id) {
+		var id = this.state.pushEvent.trackId;
+		var music = [];
 
-        AsyncStorage.getItem('rn-box.movies')
-            .then(req => JSON.parse(req))
-            .then(json => {
-                movies = [].concat(json);
-                movies.push(this.state.pushEvent);
+		AsyncStorage.getItem('rn-box.music')
+			.then(req => JSON.parse(req))
+			.then(json => {
 
-                if (movies[0] == null) {
-                    movies.shift()
-                } // Hack !!!
+				music = [].concat(json);
 
-                AsyncStorage.setItem('rn-box.movies', JSON.stringify(movies))
-                    .then(json => {
-                            appConfig.movies.refresh = true;
-                            this.props.navigator.pop();
-                        }
-                    );
+				for (var i = 0; i < music.length; i++) {
+					if (music[i].trackId == id) {
+						music.splice(i, 1);
+						break;
+					}
+				}
 
-            })
-            .catch(error => console.log(error));
-    }
+				AsyncStorage.setItem('rn-box.music', JSON.stringify(music))
+					.then(json => {
+							appConfig.music.refresh = true;
+							this.props.navigator.pop();
+						}
+					);
+
+			})
+			.catch(error => console.log(error))
+	}
 		
     playTrack() {
 		this.props.navigator.push({
-			index: 3,
+			index: 2,
 			data: {
 				url: this.state.pushEvent.previewUrl
 			}
@@ -97,14 +115,14 @@ class SearchDetailsMovies extends Component {
 					source={{uri: this.state.pushEvent.pic}}
 					style={{
 						height: 300,
-						width: 200,
-						borderRadius: 20,
-						margin: 20
+						width: 300,
+						borderRadius: 10,
+						margin: 5
 					}}
 				/>;
 			}
 		}
-		
+
         return (
             <View style={styles.container}>
 				<View style={styles.header}>
@@ -129,11 +147,11 @@ class SearchDetailsMovies extends Component {
 					</View>						
 					<View>
 						<TouchableHighlight
-							onPress={()=> this.localStorageInsert()}
+							onPress={()=> this.deleteMovieDialog()}
 							underlayColor='darkblue'
 						>
 							<Text style={styles.textSmall}>
-								Add
+								Delete
 							</Text>
 						</TouchableHighlight>	
 					</View>
@@ -172,11 +190,7 @@ class SearchDetailsMovies extends Component {
 						<Text style={styles.itemTextSmallBold}>
 							{this.state.pushEvent.artistName}
 						</Text>
-						
-						<Text style={styles.itemTextLeft}>
-							{this.state.pushEvent.longDescription}
-						</Text>
- 						
+ 
 						<TouchableHighlight
 							onPress={()=> this.playTrack()}
 							style={styles.button}>
@@ -246,13 +260,6 @@ const styles = StyleSheet.create({
         margin: 3,
         marginLeft: 2,
         color: 'black'
-    },	  
-	itemTextLeft: {
-        fontSize: 14,
-        textAlign: 'left',
-        margin: 3,
-        marginLeft: 2,
-        color: 'black'
     },	
 	itemTextSmallBold: {
         fontSize: 14,
@@ -288,4 +295,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SearchDetailsMovies;
+export default MusicDetails;

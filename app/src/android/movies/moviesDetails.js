@@ -42,8 +42,8 @@ class MoviesDetails extends Component {
 	
     deleteMovieDialog() {
 		Alert.alert(
-			'Delete music',
-			'Are you sure you want to delete music ' + this.state.pushEvent.trackName + '?',
+			'Delete movie',
+			'Are you sure you want to delete movie ' + this.state.pushEvent.trackName + '?',
 			[
 				{text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
 				{
@@ -59,7 +59,7 @@ class MoviesDetails extends Component {
 		var id = this.state.pushEvent.trackId;
 		var movies = [];
 
-		AsyncStorage.getItem('rn-movies.movies')
+		AsyncStorage.getItem('rn-box.movies')
 			.then(req => JSON.parse(req))
 			.then(json => {
 
@@ -72,7 +72,7 @@ class MoviesDetails extends Component {
 					}
 				}
 
-				AsyncStorage.setItem('rn-movies.movies', JSON.stringify(movies))
+				AsyncStorage.setItem('rn-box.movies', JSON.stringify(movies))
 					.then(json => {
 							appConfig.movies.refresh = true;
 							this.props.navigator.pop();
@@ -190,7 +190,11 @@ class MoviesDetails extends Component {
 						<Text style={styles.itemTextSmallBold}>
 							{this.state.pushEvent.artistName}
 						</Text>
- 
+ 						
+						<Text style={styles.itemTextLeft}>
+							{this.state.pushEvent.longDescription}
+						</Text>
+						
 						<TouchableHighlight
 							onPress={()=> this.playTrack()}
 							style={styles.button}>
@@ -257,6 +261,13 @@ const styles = StyleSheet.create({
 	itemText: {
         fontSize: 14,
         textAlign: 'center',
+        margin: 3,
+        marginLeft: 2,
+        color: 'black'
+    },
+	itemTextLeft: {
+        fontSize: 14,
+        textAlign: 'left',
         margin: 3,
         marginLeft: 2,
         color: 'black'

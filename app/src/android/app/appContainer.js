@@ -12,8 +12,8 @@ import SearchDetailsMusic from '../search/searchDetailsMusic';
 import SearchResultsMovies from '../search/searchResultsMovies';
 import SearchDetailsMovies from '../search/searchDetailsMovies';
 
-import Music from '../movies/movies';
-import MusicDetails from '../movies/moviesDetails';
+import Music from '../music/music';
+import MusicDetails from '../music/musicDetails';
  
 import Movies from '../movies/movies';
 import MoviesDetails from '../movies/moviesDetails';
@@ -35,7 +35,8 @@ class AppContainer extends Component {
 					backgroundColor='white'/>}
             >
                 <SearchTab tabLabel="Search"/>
-                <MoviesTab tabLabel="Music"/>
+                <MusicTab tabLabel="Music"/>
+                <MoviesTab tabLabel="Movies"/>
             </ScrollableTabView>
         );
     }
@@ -84,13 +85,49 @@ class SearchTab extends Component {
     }
 }
 
+class MusicTab extends Component {
+	constructor(props) {
+		super(props);
+		this.routes = [
+			{title: 'Music', index: 0},
+			{title: 'Music Details', index: 1},
+			{title: 'PlayTrack', index: 2}
+		];
+	}
+		  
+	renderScene(route, navigator) {
+		switch (route.index) {
+			case 0: return <Music routes={this.routes} navigator={navigator} />
+					break;			
+			case 1: return <MusicDetails data={route.data} routes={this.routes} navigator={navigator} />
+					break;			
+			case 2: return <PlayTrack data={route.data} routes={this.routes} navigator={navigator} />
+					break;
+ 		}
+ 	}	
+	
+	render() {
+		return (
+	  		<NavigationExperimental.Navigator
+				initialRoute={this.routes[0]}
+				initialRouteStack={this.routes}
+				renderScene={this.renderScene.bind(this)}
+				style={{padding: 0}}
+			  
+				configureScene={(route, routeStack) =>
+					NavigationExperimental.Navigator.SceneConfigs.PushFromRight}
+			/>
+		)
+	}
+}
+
 class MoviesTab extends Component {
 	constructor(props) {
 		super(props);
 		this.routes = [
 			{title: 'Movies', index: 0},
 			{title: 'Movies Details', index: 1},
-			{title: 'Web', index: 2}
+			{title: 'PlayTrack', index: 2}
 		];
 	}
 		  

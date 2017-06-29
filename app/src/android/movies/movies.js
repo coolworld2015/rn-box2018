@@ -67,7 +67,7 @@ class Movies extends Component {
 			searchQuery: ''
         });
 		
-        AsyncStorage.getItem('rn-movies.movies')
+        AsyncStorage.getItem('rn-box.movies')
             .then(req => JSON.parse(req))
             .then(json => {
 				if (json) {
@@ -263,7 +263,7 @@ class Movies extends Component {
 							underlayColor='#ddd'
 						>
 							<Text style={styles.textLarge}>
-								Music
+								Movies
 							</Text>
 						</TouchableHighlight>	
 					</View>						
