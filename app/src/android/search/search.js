@@ -258,6 +258,7 @@ class Search extends Component {
                                     color: 'darkblue',
                                     paddingTop: 6
                                 }}
+								placeholderTextColor="darkblue"
                                 placeholder="Search here">
                             </TextInput>
                         </View>
