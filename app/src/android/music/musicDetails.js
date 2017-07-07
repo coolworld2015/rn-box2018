@@ -87,6 +87,7 @@ class MusicDetails extends Component {
 		this.props.navigator.push({
 			index: 2,
 			data: {
+				name: this.state.pushEvent.trackName,
 				url: this.state.pushEvent.previewUrl
 			}
 		});
@@ -165,10 +166,13 @@ class MusicDetails extends Component {
 							justifyContent: 'flex-start',
 							backgroundColor: 'white'
 					}}>
-					<View style={{
-						 alignItems: 'center'
-					}}>
+					<View style={{alignItems: 'center'}}>
+						<TouchableHighlight
+							onPress={()=> this.playTrack()}
+							underlayColor='darkblue'
+						>
 						{image}
+						</TouchableHighlight>
 					</View>
 					
 						<Text style={styles.itemTextBold}>
