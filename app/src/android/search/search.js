@@ -20,10 +20,10 @@ class Search extends Component {
         this.state = {
             showProgress: false,
             eventSwitchTitle: true,
-            eventSwitchBase: true,
+            eventSwitchBase: false,
             eventSwitchBaseMovies: true,
-            eventSwitchBaseType: true,
-            textSwitchBase: 'Search clips',
+            eventSwitchBaseType: false,
+            textSwitchBase: 'Search music',
             textSwitchBaseMovies: 'Search movies',
             textSwitchBaseType: 'Music',
             bugANDROID: ''
@@ -92,7 +92,7 @@ class Search extends Component {
     }
 
     toggleTypeChangeType() {
-        if (!this.state.eventSwitchBaseType) {
+        if (this.state.eventSwitchBaseType) {
             this.setState({
                 textSwitchBaseType: 'Music'
             });
@@ -104,13 +104,13 @@ class Search extends Component {
     }
 	
     toggleTypeChange() {
-        if (!this.state.eventSwitchBase) {
+        if (this.state.eventSwitchBase) {
             this.setState({
-                textSwitchBase: 'Search clips'
+                textSwitchBase: 'Search music'
             });
         } else {
             this.setState({
-                textSwitchBase: 'Search music'
+                textSwitchBase: 'Search clips'
             });
         }
     }	
@@ -144,26 +144,6 @@ class Search extends Component {
             showBlock = <View style={styles.switchBlock}>
 				<View>
 					<Text style={styles.switchItemText}>
-						{this.state.textSwitchBase}
-					</Text>
-				</View>
-
-				<View style={styles.switchItem}>
-					<Switch
-						onValueChange={(value) => {
-							this.toggleTypeChange();
-							this.setState({
-								eventSwitchBase: value
-							});
-						}}
-						value={this.state.eventSwitchBase}
-					/>
-				</View>
-			</View>;
-        } else {
-            showBlock = <View style={styles.switchBlock}>
-				<View>
-					<Text style={styles.switchItemText}>
 						{this.state.textSwitchBaseMovies}
 					</Text>
 				</View>
@@ -177,6 +157,26 @@ class Search extends Component {
 							});
 						}}
 						value={this.state.eventSwitchBaseMovies}
+					/>
+				</View>
+			</View>;
+        } else {
+            showBlock = <View style={styles.switchBlock}>
+				<View>
+					<Text style={styles.switchItemText}>
+						{this.state.textSwitchBase}
+					</Text>
+				</View>
+
+				<View style={styles.switchItem}>
+					<Switch
+						onValueChange={(value) => {
+							this.toggleTypeChange();
+							this.setState({
+								eventSwitchBase: value
+							});
+						}}
+						value={this.state.eventSwitchBase}
 					/>
 				</View>
 			</View>;
