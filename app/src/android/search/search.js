@@ -185,108 +185,121 @@ class Search extends Component {
 		}
 		
         return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <View>
-						<TouchableHighlight
-							onPress={()=> this.goBack()}
-							underlayColor='darkblue'
-						>
-                            <View>
-                                <Text style={styles.textSmall}>
-                                </Text>
-                            </View>
-                        </TouchableHighlight>
-                    </View>
-                    <View>
-                        <TouchableWithoutFeedback>
-                            <View>
-                                <Text style={styles.textLarge}>
-                                    Search
-                                </Text>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </View>
-                    <View>
-						<TouchableHighlight
-							onPress={()=> this.clearSearch()}
-							underlayColor='darkblue'
-						>
-                            <View>
-                                <Text style={styles.textSmall}>
-                                    Clear
-                                </Text>
-                            </View>
-                        </TouchableHighlight>
-                    </View>
-                </View>
+            <View style={styles.adcontainer}>
+				<View style={styles.container}>
+					<View style={styles.header}>
+						<View>
+							<TouchableHighlight
+								onPress={()=> this.goBack()}
+								underlayColor='darkblue'
+							>
+								<View>
+									<Text style={styles.textSmall}>
+									</Text>
+								</View>
+							</TouchableHighlight>
+						</View>
+						<View>
+							<TouchableWithoutFeedback>
+								<View>
+									<Text style={styles.textLarge}>
+										Search
+									</Text>
+								</View>
+							</TouchableWithoutFeedback>
+						</View>
+						<View>
+							<TouchableHighlight
+								onPress={()=> this.clearSearch()}
+								underlayColor='darkblue'
+							>
+								<View>
+									<Text style={styles.textSmall}>
+										Clear
+									</Text>
+								</View>
+							</TouchableHighlight>
+						</View>
+					</View>
 
-                <ScrollView keyboardShouldPersistTaps='always'>
-                    <View style={styles.scrollBlock}>
-                        <View style={styles.switchBlock}>
-                            <View>
-                                <Text style={styles.switchItemText}>
-                                    {this.state.textSwitchBaseType}
-                                </Text>
-                            </View>
+					<ScrollView keyboardShouldPersistTaps='always'>
+						<View style={styles.scrollBlock}>
+							<View style={styles.switchBlock}>
+								<View>
+									<Text style={styles.switchItemText}>
+										{this.state.textSwitchBaseType}
+									</Text>
+								</View>
 
-                            <View style={styles.switchItem}>
-                                <Switch
-                                    onValueChange={(value) => {
-                                        this.toggleTypeChangeType();
-                                        this.setState({
-                                            eventSwitchBaseType: value
-                                        });
-                                    }}
-                                    value={this.state.eventSwitchBaseType}
-                                />
-                            </View>
-                        </View>   
-						
-						{showBlock}
+								<View style={styles.switchItem}>
+									<Switch
+										onValueChange={(value) => {
+											this.toggleTypeChangeType();
+											this.setState({
+												eventSwitchBaseType: value
+											});
+										}}
+										value={this.state.eventSwitchBaseType}
+									/>
+								</View>
+							</View>   
+							
+							{showBlock}
 
-                        <View style={styles.inputBlock}>
-                            <TextInput
-                                underlineColorAndroid='rgba(0,0,0,0)'
-                                onChangeText={(text) => this.setState({
-                                    searchQuery: text,
-                                    invalidValue: false
-                                })}
-                                value={this.state.searchQuery}
-                                style={{
-                                    height: 50,
-                                    width: this.state.width * .94,
-                                    fontSize: 18,
-                                    color: 'darkblue',
-                                    paddingTop: 6
-                                }}
-								placeholderTextColor="darkblue"
-                                placeholder="Search here">
-                            </TextInput>
-                        </View>
+							<View style={styles.inputBlock}>
+								<TextInput
+									underlineColorAndroid='rgba(0,0,0,0)'
+									onChangeText={(text) => this.setState({
+										searchQuery: text,
+										invalidValue: false
+									})}
+									value={this.state.searchQuery}
+									style={{
+										height: 50,
+										width: this.state.width * .94,
+										fontSize: 18,
+										color: 'darkblue',
+										paddingTop: 6
+									}}
+									placeholderTextColor="darkblue"
+									placeholder="Search here">
+								</TextInput>
+							</View>
 
-                        {validCtrl}
+							{validCtrl}
 
-                        <TouchableHighlight
-                            onPress={() => this.onSearchPressed()}
-                            style={styles.button}>
-                            <Text style={styles.buttonText}>
-                                Submit
-                            </Text>
-                        </TouchableHighlight>
-                    </View>
-                </ScrollView>
+							<TouchableHighlight
+								onPress={() => this.onSearchPressed()}
+								style={styles.button}>
+								<Text style={styles.buttonText}>
+									Submit
+								</Text>
+							</TouchableHighlight>
+						</View>
+					</ScrollView>
+				</View>
 				
 				<View style={styles.banner}>
 					<AdMobBanner adUnitID="ca-app-pub-4884500146569199/5596319463"/>
 				</View>
-            </View>
+			</View>
         )
     }
 }
-
+/*
+<AdMobBanner adUnitID="ca-app-pub-4884500146569199/5596319463"/>
+<Text>
+	Banner
+</Text>
+*/
 const styles = StyleSheet.create({
-    container: {
+    adcontainer: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        backgroundColor: 'white'
+    },    
+	container: {
         flex: 1,
         justifyContent: 'center',
         backgroundColor: 'white'
@@ -381,13 +394,8 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     banner: {
-		marginBottom: -50,
-        height: 20,
         borderWidth: 1,
-        borderColor: 'darkblue',
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+        borderColor: 'darkblue'
     },	
 });
 
