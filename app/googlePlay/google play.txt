@@ -17,7 +17,7 @@ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.
 6.
 zipalign -v 4 app-release-unsigned.apk rn-box.apk
 
-Media Box.
+RN-Box.
 Music, clips, movies, tv-shows - off line.
 You needn't Internet.
 Enjoy it.
