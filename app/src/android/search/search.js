@@ -280,7 +280,7 @@ class Search extends Component {
 				</View>
 				
 				<View style={styles.banner}>
-					<AdMobBanner adUnitID="ca-app-pub-4884500146569199/5596319463"/>
+					<AdMobBanner adUnitID="ca-app-pub-4884500146569199/9247128195"/>
 				</View>
 			</View>
         )
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     banner: {
-        borderWidth: 1,
+        //borderWidth: 1,
         borderColor: 'darkblue'
     },	
 });
