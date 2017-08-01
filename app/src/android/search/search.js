@@ -13,6 +13,8 @@ import {
     Dimensions
 } from 'react-native';
 
+import {AdMobBanner} from 'react-native-admob';
+
 class Search extends Component {
     constructor(props) {
         super(props);
@@ -274,6 +276,10 @@ class Search extends Component {
                         </TouchableHighlight>
                     </View>
                 </ScrollView>
+				
+				<View style={styles.banner}>
+					<AdMobBanner adUnitID="ca-app-pub-4884500146569199/5596319463"/>
+				</View>
             </View>
         )
     }
@@ -373,7 +379,16 @@ const styles = StyleSheet.create({
         paddingTop: 10,
 		marginBottom: -6,
         textAlign: 'center'
-    }
+    },
+    banner: {
+		marginBottom: -50,
+        height: 20,
+        borderWidth: 1,
+        borderColor: 'darkblue',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },	
 });
 
 export default Search;
