@@ -280,7 +280,6 @@ class Search extends Component {
 				</View>
 				
 				<View style={styles.banner}>
-					<AdMobBanner adUnitID="ca-app-pub-4884500146569199/9247128195"/>
 				</View>
 			</View>
         )
